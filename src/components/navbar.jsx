@@ -1,12 +1,20 @@
+import { useNavigate } from "react-router-dom"
 import styled, { createGlobalStyle } from "styled-components"
 
 export default function Navbar() {
+
+    const router = useNavigate()
+
+    function goTo(params) {
+        router(params)
+    }
+
     return (
         <>
             <Content>
                 <div className="title">Online Polling</div>
                 <div className="menu">
-                    <div className="menu-list">Create Poll</div>
+                    <div className="menu-list" onClick={() => goTo('/create')}>Create Poll</div>
                     <div className="menu-list"><button>Login</button></div>
                 </div>
             </Content>
@@ -30,9 +38,10 @@ const Content = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    user-select: none;
 
     .title{
-        margin-left: 20px;
+        margin-left: 50px;
         color: var(--text);
         background-color: var(--secondary);
         font-size: 30px;
@@ -68,6 +77,7 @@ const Content = styled.div`
     @media only screen and (max-width: 700px){
         .title{
             font-size: 25px;
+            margin-left: 20px;
         }
     }
 `
