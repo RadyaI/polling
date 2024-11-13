@@ -11,7 +11,7 @@ export default function Dashboard() {
     )
 }
 
-const GlobalStyle = createGlobalStyle`
+createGlobalStyle`
     :root{
         --primary: #111828;
         --secondary: #202938;
