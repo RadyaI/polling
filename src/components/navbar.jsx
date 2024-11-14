@@ -12,11 +12,11 @@ export default function Navbar() {
     return (
         <>
             <Content>
-                <div className="title">Online Polling</div>
-                <div className="menu">
+                <div className="title">Polling</div>
+                {/* <div className="menu">
                     <div className="menu-list" onClick={() => goTo('/create')}>Create Poll</div>
                     <div className="menu-list"><button>Login</button></div>
-                </div>
+                </div> */}
             </Content>
         </>
     )
@@ -34,23 +34,24 @@ createGlobalStyle`
 const Content = styled.div`
     width: 100%;
     height: 80px;
-    background-color: var(--secondary);
+    background-color: var(--primary);
     display: flex;
     justify-content: space-between;
     align-items: center;
     user-select: none;
+    font-family: "Inter";
 
     .title{
         margin-left: 50px;
         color: var(--text);
-        background-color: var(--secondary);
+        background-color: var(--primary);
         font-size: 30px;
         font-weight: bold;
     }
     
     .menu{
         margin-right: 20px;
-        background-color: var(--secondary);
+        background-color: var(--primary);
         width: 300px;
         height: 50px;
         display: flex;
@@ -59,7 +60,7 @@ const Content = styled.div`
     }
 
     .menu .menu-list{
-        background-color: var(--secondary);
+        background-color: var(--primary);
         color: var(--text);
         cursor: pointer;
     }
