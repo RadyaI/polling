@@ -16,10 +16,14 @@ export default function Dashboard() {
             <Content>
                 <div className="poll">
                     <p>Martabak manis atau terang bulan?</p>
-                    <div className="yesno">
+                    <div className="result">
+                        <p>Hasilnya...</p>
+                        <p></p>
+                    </div>
+                    {/* <div className="yesno">
                         <button>Martabak Manis</button>
                         <button>Terang Bulan</button>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="poll">
                     <p>Martabak manis atau terang bulan?</p>
@@ -65,17 +69,30 @@ const Content = styled.div`
     margin-top: 100px;
     padding: 20px 0;
     font-family: "Inter";
-    /* border: 1px solid white; */
+    border: 1px solid white;
 
 
     .poll{
-        /* border: 1px solid white; */
+        border: 1px solid white;
         color: var(--text);
-        width: fit-content;
+        width: 70%;
         height: 100%;
         margin: 0 auto;
         padding: 5px;
         margin-bottom: 70px;
+    }
+
+    .poll .result{
+        border: 1px solid white;
+        width: 95%;
+        height: auto;
+        padding: 20px 10px;
+        margin-top: 10px;
+    }
+
+    .poll .result p:nth-child(1){
+        font-weight: bold;
+        text-align: center;
     }
 
     .poll p {
