@@ -1,14 +1,56 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import styled from "styled-components"
 import googleIcon from '../assets/google.svg'
+import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from "firebase/auth"
+import { auth } from "../config/firebase"
+import Cookie from "js-cookie"
+import { useNavigate } from "react-router-dom"
 
 export function Auth() {
 
+    const router = useNavigate()
     const [option, setOption] = useState("Login")
+
+    async function loginEmail() {
+
+    }
+
+    async function register() {
+
+    }
+
+    async function googleLogin() {
+        try {
+            const provider = new GoogleAuthProvider()
+            const user = await signInWithPopup(auth, provider)
+
+            const storeUser = {
+                userId: user.user.uid,
+                name: user.user.displayName,
+                email: user.user.email,
+                photoUrl: user.user.photoURL
+            }
+
+            Cookie.set("userData", JSON.stringify(storeUser))
+            router("/")
+
+        } catch (error) {
+            console.log({ error: error.message })
+        }
+    }
+
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                router("/")
+            }
+        })
+    }, [])
 
     return (
         <>
             <Container>
+                <Circle1></Circle1>
                 <Card>
                     <div className="option"><span onClick={() => setOption('Login')} className={`${option === 'Login' ? 'selected' : ''}`}>Login</span> | <span className={`${option === 'Register' ? 'selected' : ''}`} onClick={() => setOption('Register')}>Register</span></div>
                     <div className="form">
@@ -26,8 +68,9 @@ export function Auth() {
                         </div>
                     </div>
                     <div className="button">
-                        <button>{option}</button>
-                        <button><img src={googleIcon} alt="google" /></button>
+                        {option === "Login" && (<button>{option}</button>)}
+                        {option === "Register" && (<button>{option}</button>)}
+                        <button onClick={() => googleLogin()}><img src={googleIcon} alt="google" /></button>
                     </div>
                 </Card>
             </Container>
@@ -36,6 +79,7 @@ export function Auth() {
 }
 
 const Container = styled.div`
+    overflow: hidden;
     width: 100%;
     height: 100dvh;
     display: flex;
@@ -44,6 +88,7 @@ const Container = styled.div`
 `
 
 const Card = styled.div`
+    z-index: 99;
     width: 500px;
     height: 80dvh;
     padding: 15px;
@@ -126,4 +171,16 @@ const Card = styled.div`
     @media only screen and (max-width: 700px){
         width: 85%;
     }
+`
+
+const Circle1 = styled.div`
+    position: fixed;
+    z-index: 1;
+    bottom: -30px;
+    right: 280px;
+    width: 250px;
+    height: 250px;
+    background-color: var(--text);
+    border-radius: 50%;
+    filter: blur(100px);
 `

@@ -6,18 +6,19 @@ import { onAuthStateChanged } from 'firebase/auth'
 
 export function Protected({ View }) {
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const router = useNavigate()
+
     useEffect(() => {
         const subscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
-                setIsLoggedIn(true)
+                console.log("Hai!")
             } else {
-                setIsLoggedIn(false)
+                router("/auth")
             }
         })
 
         return () => subscribe()
     }, [])
 
-    return isLoggedIn ? <View /> : <Navigate to={"/"} replace />
+    return <View />
 }
