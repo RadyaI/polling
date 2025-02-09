@@ -1,8 +1,8 @@
 import styled, { createGlobalStyle } from "styled-components"
-
-import Navbar from "./components/navbar"
+import Navbar from "../components/navbar"
 
 export default function Dashboard() {
+
     return (
         <>
             <Navbar></Navbar>

@@ -1,21 +1,29 @@
 import { useNavigate } from "react-router-dom"
 import styled, { createGlobalStyle } from "styled-components"
+import { Loader } from "./loader"
+import { useState } from "react"
 
 export default function Navbar() {
 
     const router = useNavigate()
+    const [isLoading, setIsLoading] = useState(false)
 
     function goTo(params) {
-        router(params)
+        setIsLoading(true)
+        setTimeout(() => {
+            router(params)
+            setIsLoading(false)
+        }, 500);
     }
 
     return (
         <>
+            {isLoading && (<Loader></Loader>)}
             <Content>
                 <div className="title">Online Polling</div>
                 <div className="menu">
                     <div className="menu-list" onClick={() => goTo('/create')}>Create Poll</div>
-                    <div className="menu-list"><button>Login</button></div>
+                    <div className="menu-list"><button onClick={() => goTo('/auth')}>Login</button></div>
                 </div>
             </Content>
         </>
