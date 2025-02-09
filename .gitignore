@@ -13,6 +13,7 @@ dist-ssr
 *.local
 
 .env
+projectnote.json
 
 # Editor directories and files
 .vscode/*
