@@ -16,6 +16,7 @@ const animation = keyframes`
 
 const Load = styled.div`
     position: absolute;
+    top: 0;
     background-color: pink;
     width: 100%;
     height: 2px;

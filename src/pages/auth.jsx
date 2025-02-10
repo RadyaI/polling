@@ -52,8 +52,6 @@ export function Auth() {
             }
 
             Cookie.set("userData", JSON.stringify(storeUser))
-            router("/")
-
         } catch (error) {
             console.log({ error: error.message })
         }
@@ -62,7 +60,7 @@ export function Auth() {
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                router("/")
+                router("/polling")
             }
         })
     }, [])
@@ -158,6 +156,12 @@ const Card = styled.div`
         border-radius: 7px;
         font-size: 17px;
         margin-top: 10px;
+        background-color: var(--primary);
+        color: var(--text);
+    }
+
+    .input-control .input:focus{
+        border: 1px solid var(--text);
     }
 
     .button{
