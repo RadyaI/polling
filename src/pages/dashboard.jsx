@@ -20,7 +20,7 @@ export default function Dashboard() {
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
-            if(user){
+            if (user) {
                 redirect("/polling")
             }
         })
@@ -157,6 +157,12 @@ const Highlight = styled.span`
         /* filter: blur(3px); */
         width: 100%;
         height: 100%;
+    }
+
+    @media only screen and (max-width: 700px){
+        &::before{
+            display: none;
+        }
     }
 `;
 
