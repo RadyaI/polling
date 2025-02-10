@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import styled from "styled-components"
 import googleIcon from '../assets/google.svg'
-import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from "firebase/auth"
+import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth"
 import { auth } from "../config/firebase"
 import Cookie from "js-cookie"
 import { useNavigate } from "react-router-dom"
@@ -10,13 +10,24 @@ export function Auth() {
 
     const router = useNavigate()
     const [option, setOption] = useState("Login")
+    const [name, setName] = useState("")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
 
     async function loginEmail() {
-
+        try {
+            await signInWithEmailAndPassword(auth, email, password)
+        } catch (error) {
+            console.log(error.message)
+        }
     }
 
     async function register() {
-
+        try {
+            await createUserWithEmailAndPassword(auth, email, password)
+        } catch (error) {
+            console.log(error.message)
+        }
     }
 
     async function googleLogin() {
@@ -56,20 +67,20 @@ export function Auth() {
                     <div className="form">
                         {option === 'Register' && (<div className="input-control">
                             <label>Name: </label>
-                            <input type="text" className="input" placeholder="Your name..." />
+                            <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="input" placeholder="Your name..." />
                         </div>)}
                         <div className="input-control">
                             <label>Email: </label>
-                            <input type="text" className="input" placeholder="Your name..." />
+                            <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} className="input" placeholder="example@gmail.com" />
                         </div>
                         <div className="input-control">
                             <label>Password: </label>
-                            <input type="text" className="input" placeholder="Your name..." />
+                            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="input" placeholder="Your password..." />
                         </div>
                     </div>
                     <div className="button">
-                        {option === "Login" && (<button>{option}</button>)}
-                        {option === "Register" && (<button>{option}</button>)}
+                        {option === "Login" && (<button onClick={() => loginEmail()}>{option}</button>)}
+                        {option === "Register" && (<button onClick={() => register()}>{option}</button>)}
                         <button onClick={() => googleLogin()}><img src={googleIcon} alt="google" /></button>
                     </div>
                 </Card>
