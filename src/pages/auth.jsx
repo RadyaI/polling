@@ -4,6 +4,7 @@ import googleIcon from '../assets/google.svg'
 import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth"
 import { auth } from "../config/firebase"
 import Cookie from "js-cookie"
+import swal from "sweetalert"
 import { useNavigate } from "react-router-dom"
 
 export function Auth() {
@@ -18,7 +19,11 @@ export function Auth() {
         try {
             await signInWithEmailAndPassword(auth, email, password)
         } catch (error) {
-            console.log(error.message)
+            swal({
+                icon: 'error',
+                title: `${error.message}`,
+                button: "Ok"
+            })
         }
     }
 
@@ -26,7 +31,11 @@ export function Auth() {
         try {
             await createUserWithEmailAndPassword(auth, email, password)
         } catch (error) {
-            console.log(error.message)
+            swal({
+                icon: 'error',
+                title: `${error.message}`,
+                button: "Ok"
+            })
         }
     }
 
