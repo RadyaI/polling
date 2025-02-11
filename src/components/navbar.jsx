@@ -73,9 +73,10 @@ createGlobalStyle`
 `
 
 const Content = styled.div`
+    z-index: 999999999;
     width: 100%;
     height: 80px;
-    background-color: var(--secondary);
+    /* background-color: var(--secondary); */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -84,14 +85,12 @@ const Content = styled.div`
     .title{
         margin-left: 50px;
         color: var(--text);
-        background-color: var(--secondary);
         font-size: 30px;
         font-weight: bold;
     }
     
     .menu{
         margin-right: 20px;
-        background-color: var(--secondary);
         width: 300px;
         height: 50px;
         display: flex;
@@ -100,7 +99,6 @@ const Content = styled.div`
     }
 
     .menu .menu-list{
-        background-color: var(--secondary);
         color: var(--text);
         cursor: pointer;
     }

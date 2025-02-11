@@ -3,7 +3,7 @@ import Dashboard from "../pages/dashboard";
 import { Auth } from "../pages/auth";
 import { Protected } from "../components/protectedRoute";
 import { CreatePoll } from "../pages/polling/create";
-import { PollingList } from "../pages/polling/list";
+import { PollingList } from "../pages/polling/Dashboard";
 
 const router = createBrowserRouter([
     {
