@@ -30,6 +30,17 @@ export default function Dashboard() {
         <>
             {isLoad && (<Loader></Loader>)}
             <CircleBottom></CircleBottom>
+            <Square>
+                <div className="subSquare"></div>
+                <div className="subSquare"></div>
+                <div className="subSquare"></div>
+                <div className="subSquare"></div>
+                <div className="subSquare"></div>
+                <div className="subSquare"></div>
+                <div className="subSquare"></div>
+                <div className="subSquare"></div>
+                <div className="subSquare"></div>
+            </Square>
             <Container>
                 <Content>
                     <div className="text">
@@ -64,6 +75,53 @@ const circleTopAnimate = keyframes`
     /* from{transform: rotate(0deg);}
     to{transform: rotate(180deg);} */
 `
+
+const Square = styled.div`
+    position: fixed;
+    width: 250px;
+    height: 200px;
+    bottom: -20px;
+    left: -20px;
+    display: flex;
+    flex-wrap: wrap;
+
+    @media only screen and (max-width: 700px){
+        display: none;
+    }
+
+    .subSquare {
+        width: 30%;
+        height: 33%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .subSquare:nth-child(1), 
+    .subSquare:nth-child(2), 
+    .subSquare:nth-child(3) {
+        border-bottom: 1px solid white;
+    }
+
+    .subSquare:nth-child(7), 
+    .subSquare:nth-child(8), 
+    .subSquare:nth-child(9) {
+        border-top: 1px solid white;
+    }
+
+    .subSquare:nth-child(1), 
+    .subSquare:nth-child(4), 
+    .subSquare:nth-child(7) {
+        border-right: 1px solid white;
+    }
+
+    .subSquare:nth-child(3), 
+    .subSquare:nth-child(6), 
+    .subSquare:nth-child(9) {
+        border-left: 1px solid white;
+    }
+`;
+
 
 const CircleTop = styled.div`
     position: absolute;
