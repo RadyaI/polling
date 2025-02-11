@@ -43,7 +43,6 @@ export function Auth() {
         try {
             const provider = new GoogleAuthProvider()
             const user = await signInWithPopup(auth, provider)
-
             const storeUser = {
                 userId: user.user.uid,
                 name: user.user.displayName,
@@ -54,6 +53,16 @@ export function Auth() {
             Cookie.set("userData", JSON.stringify(storeUser))
         } catch (error) {
             console.log({ error: error.message })
+        }
+    }
+
+    function handleKey(e) {
+        if (e.key === "Enter") {
+            if (option === "Login") {
+                loginEmail()
+            } else if (option === "Register") {
+                register()
+            }
         }
     }
 
@@ -82,7 +91,7 @@ export function Auth() {
                         </div>
                         <div className="input-control">
                             <label>Password: </label>
-                            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="input" placeholder="Your password..." />
+                            <input type="password" value={password} onKeyUp={(e) => handleKey(e)} onChange={(e) => setPassword(e.target.value)} className="input" placeholder="Your password..." />
                         </div>
                     </div>
                     <div className="button">
