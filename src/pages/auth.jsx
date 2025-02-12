@@ -11,13 +11,17 @@ export function Auth() {
 
     const router = useNavigate()
     const [option, setOption] = useState("Login")
+    const [loginBtn, setLoginBtn] = useState("Login")
+    const [registerBtn, setRegisterBtn] = useState("Register")
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
     async function loginEmail() {
         try {
+            setLoginBtn("Loading...")
             await signInWithEmailAndPassword(auth, email, password)
+            setLoginBtn("Login")
         } catch (error) {
             swal({
                 icon: 'error',
@@ -29,7 +33,9 @@ export function Auth() {
 
     async function register() {
         try {
+            setRegisterBtn("Loading...")
             await createUserWithEmailAndPassword(auth, email, password)
+            setLoginBtn("Register")
         } catch (error) {
             swal({
                 icon: 'error',
@@ -95,8 +101,8 @@ export function Auth() {
                         </div>
                     </div>
                     <div className="button">
-                        {option === "Login" && (<button onClick={() => loginEmail()}>{option}</button>)}
-                        {option === "Register" && (<button onClick={() => register()}>{option}</button>)}
+                        {option === "Login" && (<button onClick={() => loginEmail()}>{loginBtn}</button>)}
+                        {option === "Register" && (<button onClick={() => register()}>{registerBtn}</button>)}
                         <button onClick={() => googleLogin()}><img src={googleIcon} alt="google" /></button>
                     </div>
                 </Card>

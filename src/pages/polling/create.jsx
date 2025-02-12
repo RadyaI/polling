@@ -22,6 +22,13 @@ export function CreatePoll() {
         setOptions(updatedOptions);
     };
 
+    function publish() {
+        console.log({
+            title,
+            options
+        })
+    }
+
     return (
         <>
             <Navbar></Navbar>
@@ -54,6 +61,10 @@ export function CreatePoll() {
                     </div>
                 </div>
             </Wrapper>
+            <Action>
+                <button className="btn-draft">Save</button>
+                <button className="btn-publish" onClick={() => publish()}>Publish</button>
+            </Action>
         </>
     )
 }
@@ -137,4 +148,31 @@ const Wrapper = styled.div`
             width: 80%;
         }
     }
+`
+
+const Action = styled.div`
+    width: 87%;
+    padding: 20px;
+    margin: 0 auto;
+    
+    button{
+        border: none;
+        padding: 10px 20px;
+        border-radius: 7px;
+        font-size: 17px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .btn-draft{
+        background-color: var(--text);
+        color: var(--primary);
+    }
+
+    .btn-publish{
+        margin-left: 20px;
+        background-color: var(--optional);
+        color: var(--text);
+    }
+    
 `
