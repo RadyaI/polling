@@ -54,7 +54,7 @@ export default function Navbar() {
             <Content>
                 <div className="title" onClick={() => goTo("/")}>Online Polling</div>
                 <div className="menu">
-                    <div className="menu-list" onClick={() => goTo('/create')}>Create Poll</div>
+                    <div className="menu-list" onClick={() => goTo('/polling/create')}>Create Poll</div>
                     {!isLogin && (<div className="menu-list"><button onClick={() => goTo('/auth')}>Login</button></div>)}
                     {isLogin && (<div className="menu-list"><button onClick={() => logOut()}>Logout</button></div>)}
                 </div>

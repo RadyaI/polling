@@ -15,13 +15,13 @@ const router = createBrowserRouter([
         Component: Auth
     },
     {
-        path: '/create',
-        Component: () => <Protected View={CreatePoll} />
-    },
-    {
         path: '/polling',
         Component: () => <Protected View={PollingList} />
-    }
+    },
+    {
+        path: '/polling/create',
+        Component: () => <Protected View={CreatePoll} />
+    },
 ])
 
 export default router
