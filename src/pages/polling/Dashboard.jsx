@@ -1,5 +1,6 @@
 import styled from "styled-components"
 import Navbar from "../../components/navbar"
+import { EditOutlined } from "@ant-design/icons";
 
 export function PollingList() {
     return (
@@ -10,6 +11,35 @@ export function PollingList() {
                     <Draft>
                         <p>Draft</p>
                         <div className="wrapper">
+
+                            <div className="card">
+                                <div className="text">
+                                    <div className="title">Vote kelas H</div>
+                                    <small>Last updated: 7 Mei 2024</small>
+                                </div>
+                                <EditOutlined className="icon" />
+                            </div>
+                            <div className="card">
+                                <div className="text">
+                                    <div className="title">Vote kelas H</div>
+                                    <small>Last updated: 7 Mei 2024</small>
+                                </div>
+                                <EditOutlined className="icon" />
+                            </div>
+                            <div className="card">
+                                <div className="text">
+                                    <div className="title">Vote kelas H</div>
+                                    <small>Last updated: 7 Mei 2024</small>
+                                </div>
+                                <EditOutlined className="icon" />
+                            </div>
+                            <div className="card">
+                                <div className="text">
+                                    <div className="title">Vote kelas H</div>
+                                    <small>Last updated: 7 Mei 2024</small>
+                                </div>
+                                <EditOutlined className="icon" />
+                            </div>
 
                         </div>
                     </Draft>
@@ -68,13 +98,14 @@ const Draft = styled.div`
         color: var(--text);
         font-size: 20px;
         font-weight: bold;
+        margin-left: 5px;
     }
     
     .wrapper{
         width: 100%;
         height: 70%;
-        border: 1px solid white;
         overflow-y: auto;
+        overflow-x: hidden;
     }
 
     .wrapper::-webkit-scrollbar {
@@ -93,13 +124,46 @@ const Draft = styled.div`
     .wrapper::-webkit-scrollbar-thumb:hover {
         background: #555;
     }
+
+    .wrapper .card{
+        background-color: var(--primary);
+        border-radius: 7px;
+        padding: 5px;
+        width: 95%;
+        height: 50px;
+        color: var(--text);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+    }
+
+
+    .wrapper > .card:not(:first-child) {
+        margin-top: 10px;
+    }
+
+    .wrapper .card .text .title{
+        font-size: 18px;
+        font-weight: bold;
+        margin-left: 20px;
+    }
+
+    .wrapper .card .text small{
+        margin-left: 20px;
+    }
+
+    .wrapper .card .icon{
+        margin-right: 20px;
+        font-size: 20px;
+    }
     
     @media only screen and (max-width: 700px){
         width: 100%;
         padding: 0;
 
         p{
-            border: 1px solid white;
             width: 90%;
             margin: 0 auto;
             margin-top: 10px;
@@ -109,6 +173,11 @@ const Draft = styled.div`
             width: 90%;
             margin: 0 auto;
             margin-top: 10px;
+        }
+
+        .wrapper .card{
+            height: 65px;
+            gap: 7px;
         }
     }
     `
