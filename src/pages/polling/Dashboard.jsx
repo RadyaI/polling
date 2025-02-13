@@ -5,13 +5,15 @@ import { useEffect, useState } from "react";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { auth, db } from "../../config/firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 export function PollingList() {
+    const router = useNavigate()
     const [pollingData, setPollingData] = useState([]);
 
     function DisplayDraftPolling() {
         return pollingData.map((i, index) => (
-            <div className="card" key={index}>
+            <div className="card" key={index} onClick={() => router(`/polling/update/${i.id}`)}>
                 <div className="text">
                     <div className="title">{i.pollName}</div>
                     <small>Last updated: {i.createdAt}</small>

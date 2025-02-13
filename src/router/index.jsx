@@ -4,6 +4,7 @@ import { Auth } from "../pages/auth";
 import { Protected } from "../components/protectedRoute";
 import { CreatePoll } from "../pages/polling/create";
 import { PollingList } from "../pages/polling/Dashboard";
+import { UpdatePoll } from "../pages/polling/update";
 
 const router = createBrowserRouter([
     {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
         path: '/polling/create',
         Component: () => <Protected View={CreatePoll} />
     },
+    {
+        path: '/polling/update/:pollId',
+        Component: () => <Protected View={UpdatePoll} />
+    }
 ])
 
 export default router
