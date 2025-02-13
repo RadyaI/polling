@@ -16,7 +16,14 @@ export function PollingList() {
             <div className="card" key={index} onClick={() => router(`/polling/update/${i.id}`)}>
                 <div className="text">
                     <div className="title">{i.pollName}</div>
-                    <small>Last updated: {i.createdAt}</small>
+                    <small>Last updated: {new Date(i.updatedAt).toLocaleString("id-ID", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: false
+                    })}</small>
                 </div>
                 <EditOutlined className="icon" />
             </div>

@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { PlusCircleOutlined } from '@ant-design/icons'
 import { auth, db } from "../../config/firebase"
-import { addDoc, collection, doc, getDoc, Timestamp, updateDoc } from "firebase/firestore"
+import { doc, getDoc, Timestamp, updateDoc } from "firebase/firestore"
 
 export function UpdatePoll() {
 
