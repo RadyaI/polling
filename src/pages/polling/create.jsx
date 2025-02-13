@@ -55,13 +55,13 @@ export function CreatePoll() {
                 }
 
                 await addDoc(collection(db, "polling"), pollingData)
-                
+
                 swal({
                     icon: 'success',
                     // title: `${status === "Draft" ? "Saved" : "Published"}`,
                     title: false,
                     button: false,
-                    timer: 2000
+                    timer: 1200
                 })
                 router("/polling")
             }
