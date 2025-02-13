@@ -1,54 +1,74 @@
 import styled from "styled-components"
 import Navbar from "../../components/navbar"
 import { EditOutlined } from "@ant-design/icons";
+import { useEffect, useState } from "react";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import { auth, db } from "../../config/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 export function PollingList() {
+    const [pollingData, setPollingData] = useState([]);
+
+    function DisplayDraftPolling() {
+        return pollingData.map((i, index) => (
+            <div className="card" key={index}>
+                <div className="text">
+                    <div className="title">{i.pollName}</div>
+                    <small>Last updated: {i.createdAt}</small>
+                </div>
+                <EditOutlined className="icon" />
+            </div>
+        ));
+    }
+
+    async function getDraftPolling(userId) {
+        try {
+            const get = await getDocs(
+                query(
+                    collection(db, "polling"),
+                    where("userId", "==", userId),
+                    where("status", "==", "Draft"),
+                    orderBy("updatedAt", "desc")
+                )
+            );
+
+            const tempData = [];
+            get.forEach((data) => {
+                const pollingData = data.data();
+                tempData.push({ ...pollingData, id: data.id });
+            });
+            setPollingData(tempData);
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                getDraftPolling(user.uid);
+            }
+        });
+
+        return () => unsubscribe();
+    }, []);
+
     return (
-        <>
-            <Container>
-                <Navbar></Navbar>
-                <Statistik>
-                    <Draft>
-                        <p>Draft</p>
-                        <div className="wrapper">
-
-                            <div className="card">
-                                <div className="text">
-                                    <div className="title">Vote kelas H</div>
-                                    <small>Last updated: 7 Mei 2024</small>
-                                </div>
-                                <EditOutlined className="icon" />
-                            </div>
-                            <div className="card">
-                                <div className="text">
-                                    <div className="title">Vote kelas H</div>
-                                    <small>Last updated: 7 Mei 2024</small>
-                                </div>
-                                <EditOutlined className="icon" />
-                            </div>
-                            <div className="card">
-                                <div className="text">
-                                    <div className="title">Vote kelas H</div>
-                                    <small>Last updated: 7 Mei 2024</small>
-                                </div>
-                                <EditOutlined className="icon" />
-                            </div>
-                            <div className="card">
-                                <div className="text">
-                                    <div className="title">Vote kelas H</div>
-                                    <small>Last updated: 7 Mei 2024</small>
-                                </div>
-                                <EditOutlined className="icon" />
-                            </div>
-
-                        </div>
-                    </Draft>
-                    <Responders></Responders>
-                </Statistik>
-            </Container>
-        </>
-    )
+        <Container>
+            <Navbar />
+            <Statistik>
+                <Draft>
+                    <p>Draft</p>
+                    <div className="wrapper">
+                        <DisplayDraftPolling />
+                    </div>
+                </Draft>
+                <Responders />
+            </Statistik>
+        </Container>
+    );
 }
+
 
 const Container = styled.div`
     width: 100%;

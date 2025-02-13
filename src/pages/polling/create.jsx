@@ -1,8 +1,10 @@
-import styled from "styled-components"
+import styled, { keyframes } from "styled-components"
 import Navbar from "../../components/navbar"
 import { useNavigate } from "react-router-dom"
 import { useState } from "react"
 import { PlusCircleOutlined } from '@ant-design/icons'
+import { auth, db } from "../../config/firebase"
+import { addDoc, collection, Timestamp } from "firebase/firestore"
 
 export function CreatePoll() {
 
@@ -10,6 +12,7 @@ export function CreatePoll() {
 
     const [title, setTitle] = useState("");
     const [options, setOptions] = useState([{ value: "First Option" }]);
+    const [isLoading, setIsLoading] = useState(false)
 
     const handleAddOption = () => {
         setOptions([...options, { value: "" }]);
@@ -22,11 +25,49 @@ export function CreatePoll() {
         setOptions(updatedOptions);
     };
 
-    function publish() {
-        console.log({
-            title,
-            options
-        })
+    async function action(status) {
+        try {
+
+            if (title === "") {
+                return swal({
+                    icon: "error",
+                    title: "Title is required!",
+                    button: "Ok"
+                })
+            }
+
+            const alert = await swal({
+                icon: 'warning',
+                title: `You want to ${status === "Draft" ? "save?" : "publish?"}`,
+                buttons: ["No", "Yes"],
+            })
+
+            if (alert) {
+                setIsLoading(true)
+                const pollingData = {
+                    userId: auth.currentUser.uid,
+                    pollName: title,
+                    answer: options,
+                    status,
+                    winner: null,
+                    createdAt: Timestamp.now().toMillis(),
+                    updatedAt: Timestamp.now().toMillis()
+                }
+
+                await addDoc(collection(db, "polling"), pollingData)
+                
+                swal({
+                    icon: 'success',
+                    // title: `${status === "Draft" ? "Saved" : "Published"}`,
+                    title: false,
+                    button: false,
+                    timer: 2000
+                })
+                router("/polling")
+            }
+        } catch (error) {
+            console.log(error.message)
+        }
     }
 
     return (
@@ -62,12 +103,28 @@ export function CreatePoll() {
                 </div>
             </Wrapper>
             <Action>
-                <button className="btn-draft">Save</button>
-                <button className="btn-publish" onClick={() => publish()}>Publish</button>
+                {!isLoading && (<button className="btn-draft" onClick={() => action("Draft")}>Save</button>)}
+                {!isLoading && (<button className="btn-publish" onClick={() => action("Published")}>Publish</button>)}
+                {isLoading && (<Loading></Loading>)}
             </Action>
         </>
     )
 }
+
+const muter = keyframes`
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+`;
+
+const Loading = styled.div`
+    width: 30px;
+    height: 30px;
+    border: 5px solid transparent;
+    border-top-color: var(--text);
+    border-radius: 50%;
+    animation: ${muter} 500ms linear infinite;
+`;
+
 
 const Navigate = styled.div`
     width: 88%;
