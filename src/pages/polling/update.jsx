@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import { PlusCircleOutlined } from '@ant-design/icons'
 import { auth, db } from "../../config/firebase"
 import { doc, getDoc, Timestamp, updateDoc } from "firebase/firestore"
+import { Loader } from "../../components/loader"
 
 export function UpdatePoll() {
 
@@ -25,6 +26,14 @@ export function UpdatePoll() {
         );
         setOptions(updatedOptions);
     };
+
+    function goTo(params) {
+        setIsLoading(true)
+        setTimeout(() => {
+            router(params)
+            setIsLoading(false)
+        }, 500);
+    }
 
     async function getPoll() {
         try {
@@ -70,14 +79,14 @@ export function UpdatePoll() {
 
                 await updateDoc(doc(db, "polling", pollId), pollingData)
 
+                goTo("/polling")
                 swal({
                     icon: 'success',
                     // title: `${status === "Draft" ? "Saved" : "Published"}`,
                     title: false,
                     button: false,
-                    timer: 1200
+                    timer: 400
                 })
-                router("/polling")
             }
         } catch (error) {
             console.log(error.message)
@@ -87,8 +96,9 @@ export function UpdatePoll() {
     return (
         <>
             <Navbar></Navbar>
+            { isLoading && (<Loader></Loader>)}
             <Navigate>
-                <span onClick={() => router("/polling")}>polling</span> {'/'} <span>update</span>
+                <span onClick={() => goTo("/polling")}>polling</span> {'/'} <span>update</span>
             </Navigate>
             <Wrapper>
                 <div className="title">

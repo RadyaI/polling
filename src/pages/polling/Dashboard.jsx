@@ -6,14 +6,24 @@ import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { auth, db } from "../../config/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { Loader } from "../../components/loader";
 
 export function PollingList() {
     const router = useNavigate()
+    const [loading, setLoading] = useState(false)
     const [pollingData, setPollingData] = useState([]);
+
+    function goTo(params) {
+        setLoading(true)
+        setTimeout(() => {
+            router(params)
+            setLoading(false)
+        }, 500);
+    }
 
     function DisplayDraftPolling() {
         return pollingData.map((i, index) => (
-            <div className="card" key={index} onClick={() => router(`/polling/update/${i.id}`)}>
+            <div className="card" key={index} onClick={() => goTo(`/polling/update/${i.id}`)}>
                 <div className="text">
                     <div className="title">{i.pollName}</div>
                     <small>Last updated: {new Date(i.updatedAt).toLocaleString("id-ID", {
@@ -64,6 +74,7 @@ export function PollingList() {
 
     return (
         <Container>
+            {loading && (<Loader></Loader>)}
             <Navbar />
             <Statistik>
                 <Draft>

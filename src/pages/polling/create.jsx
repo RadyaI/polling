@@ -5,6 +5,7 @@ import { useState } from "react"
 import { PlusCircleOutlined } from '@ant-design/icons'
 import { auth, db } from "../../config/firebase"
 import { addDoc, collection, Timestamp } from "firebase/firestore"
+import { Loader } from "../../components/loader"
 
 export function CreatePoll() {
 
@@ -24,6 +25,14 @@ export function CreatePoll() {
         );
         setOptions(updatedOptions);
     };
+
+    function goTo(params) {
+        setIsLoading(true)
+        setTimeout(() => {
+            router(params)
+            setIsLoading(false)
+        }, 500);
+    }
 
     async function action(status) {
         try {
@@ -68,13 +77,14 @@ export function CreatePoll() {
         } catch (error) {
             console.log(error.message)
         }
-    }
+    }   
 
     return (
         <>
             <Navbar></Navbar>
+            { isLoading && (<Loader></Loader>)}
             <Navigate>
-                <span onClick={() => router("/polling")}>polling</span> {'/'} <span>create</span>
+                <span onClick={() => goTo("/polling")}>polling</span> {'/'} <span>create</span>
             </Navigate>
             <Wrapper>
                 <div className="title">
