@@ -11,7 +11,7 @@ import { Loader } from "../../components/loader";
 export function PollingList() {
     const router = useNavigate()
     const [loading, setLoading] = useState(false)
-    const [pollingData, setPollingData] = useState([]);
+    const [pollingData, setPollingData] = useState([{pollName: "Loading", updatedAt: new Date().toLocaleString()}]);
 
     function goTo(params) {
         setLoading(true)
