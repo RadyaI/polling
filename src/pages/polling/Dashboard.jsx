@@ -7,11 +7,13 @@ import { auth, db } from "../../config/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "../../components/loader";
+import { getIp } from "../../utils/ip";
+
 
 export function PollingList() {
     const router = useNavigate()
     const [loading, setLoading] = useState(false)
-    const [pollingData, setPollingData] = useState([{pollName: "Loading", updatedAt: new Date().toLocaleString()}]);
+    const [pollingData, setPollingData] = useState([{ pollName: "Loading", updatedAt: new Date().toLocaleString() }]);
 
     function goTo(params) {
         setLoading(true)
@@ -57,6 +59,8 @@ export function PollingList() {
                 tempData.push({ ...pollingData, id: data.id });
             });
             setPollingData(tempData);
+            const ip = await getIp()
+            console.log(ip)
         } catch (error) {
             console.log(error.message);
         }
