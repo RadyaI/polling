@@ -12,7 +12,7 @@ export function UpdatePoll() {
     const router = useNavigate();
     let { pollId } = useParams()
 
-    const [title, setTitle] = useState("");
+    const [title, setTitle] = useState("Loading...");
     const [options, setOptions] = useState([{ value: "First Option" }]);
     const [isLoading, setIsLoading] = useState(false)
 
