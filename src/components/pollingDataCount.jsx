@@ -1,24 +1,69 @@
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import styled from "styled-components"
+import { auth, db } from "../config/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 export function PollingDataCount() {
+
+    const [pollingData, setPollingData] = useState([])
+    const [draftPolling, setDraftPolling] = useState(0)
+    const [publishedPolling, setPublishedPolling] = useState(0)
+    const [allPolling, setAllPolling] = useState(0)
+
+    function count() {
+        setDraftPolling(pollingData.filter((i) => i.status === "Draft").length)
+        setPublishedPolling(pollingData.filter((i) => i.status === "Published").length)
+        setAllPolling(pollingData.length)
+    }
+
+    function getPolling(userId) {
+        try {
+            onSnapshot(query(
+                collection(db, "polling"),
+                where("userId", "==", userId)
+            ), (snapShot) => {
+                const temp = []
+                snapShot.forEach((data) => {
+                    temp.push({ ...data.data(), id: data.id })
+                })
+                setPollingData(temp)
+            })
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                getPolling(user.uid)
+            }
+        })
+    }, [])
+
+    useEffect(() => {
+        count()
+    }, [pollingData])
+
     return (
         <>
             <Wrapper>
                 <div className="card">
                     <div className="number">
-                        <p>21</p>
+                        <p>{draftPolling}</p>
                         <p>Draft polling</p>
                     </div>
                 </div>
                 <div className="card">
                     <div className="number">
-                        <p>18</p>
+                        <p>{publishedPolling}</p>
                         <p>Published polling</p>
                     </div>
                 </div>
                 <div className="card">
                     <div className="number">
-                        <p>38</p>
+                        <p>{allPolling}</p>
                         <p>Total polling</p>
                     </div>
                 </div>

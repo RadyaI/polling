@@ -1,15 +1,27 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { EditOutlined } from "@ant-design/icons";
+import { DeleteFilled, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../config/firebase";
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, orderBy, query, where } from "firebase/firestore";
+import { Loader } from "./loader";
+import { useNavigate } from "react-router-dom";
 
 export function PollingData() {
     const [search, setSearch] = useState("");
     const [filter, setFilter] = useState("");
 
     const [pollingData, setPollingData] = useState([])
+
+    const [isLoading, setIsLoading] = useState(false)
+    const router = useNavigate()
+    const goTo = (params) => {
+        setIsLoading(true)
+        setTimeout(() => {
+            router(params)
+            setIsLoading(false)
+        }, 500);
+    }
 
     async function getPolling(userId) {
         try {
@@ -29,17 +41,45 @@ export function PollingData() {
         }
     }
 
+    async function deletePolling(pollingId) {
+        try {
+            const alert = await swal({
+                icon: "warning",
+                title: "Delete this polling?",
+                buttons: ["No", "Yes"],
+                dangerMode: true
+            })
+
+            if (alert) {
+                const docRef = doc(db, "polling", pollingId)
+                await deleteDoc(docRef)
+
+                setPollingData((prevData) => prevData.filter((poll) => poll.id !== pollingId));
+
+                swal({
+                    icon: "success",
+                    title: false,
+                    button: false,
+                    timer: 600
+                })
+            }
+
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+
     function DisplayPolling() {
         try {
             let dataPoll = [...pollingData]
 
-            if(search !== ""){
+            if (search !== "") {
                 dataPoll = dataPoll.filter((i) => i.pollName.toLowerCase().includes(search.toLowerCase()))
             }
 
-                if(filter !== ''){
-                    dataPoll = dataPoll.filter((i) => i.status === filter)
-                }
+            if (filter !== '') {
+                dataPoll = dataPoll.filter((i) => i.status === filter)
+            }
 
             const data = dataPoll.map((i, index) =>
                 <Card key={index}>
@@ -54,7 +94,9 @@ export function PollingData() {
                     })}</Timestamp>
                     <EditButton>
                         <Status className={i.status}>{i.status}</Status>
-                        <EditOutlined className="icon" />
+                        {i.status === "Draft" && (<EditOutlined className="icon" onClick={() => goTo(`/polling/update/${i.id}`)} />)}
+                        {i.status !== "Draft" && (<EyeOutlined className="icon" />)}
+                        <DeleteFilled className="icon" onClick={() => deletePolling(i.id)}></DeleteFilled>
                     </EditButton>
                 </Card>
             )
@@ -76,25 +118,28 @@ export function PollingData() {
     }, [])
 
     return (
-        <Wrapper>
-            <FilterBox>
-                <SearchInput
-                    type="text"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Cari polling..."
-                />
-                <SelectFilter value={filter} onChange={(e) => setFilter(e.target.value)}>
-                    <option value="">Semua</option>
-                    <option value="Draft">Draft</option>
-                    <option value="Published">Published</option>
-                    <option value="Closed">Closed</option>
-                </SelectFilter>
-            </FilterBox>
-            <Polling>
-                <DisplayPolling />
-            </Polling>
-        </Wrapper>
+        <>
+            {isLoading && (<Loader />)}
+            <Wrapper>
+                <FilterBox>
+                    <SearchInput
+                        type="text"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        placeholder="Cari polling..."
+                    />
+                    <SelectFilter value={filter} onChange={(e) => setFilter(e.target.value)}>
+                        <option value="">Semua</option>
+                        <option value="Draft">Draft</option>
+                        <option value="Published">Published</option>
+                        <option value="Closed">Closed</option>
+                    </SelectFilter>
+                </FilterBox>
+                <Polling>
+                    <DisplayPolling />
+                </Polling>
+            </Wrapper>
+        </>
     );
 }
 
@@ -179,6 +224,11 @@ const Status = styled.span`
     font-size: 14px;
     font-weight: bold;
     width: fit-content;
+    margin-right: 15px;
+
+    @media only screen and (max-width: 700px){
+        margin-right: 0px;
+    }
 
     &.Draft {
         background: #ffcc00;
@@ -198,10 +248,9 @@ const Status = styled.span`
 
 const EditButton = styled.button`
     background: transparent;
-    border: none;
-    width: 15%;
+    width: 20%;
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-end;
     align-items: center;
     color: var(--text);
     font-size: 18px;
@@ -209,9 +258,11 @@ const EditButton = styled.button`
     top: 0;
     bottom: 0;
     right: 10px;
+    border: none;
     
     .icon{
         font-size: 25px;
+        margin-right: 15px;
     }
 
     .icon:hover {
@@ -221,8 +272,11 @@ const EditButton = styled.button`
 
     @media only screen and (max-width: 700px){
         position: relative;
+        width: 80%;
+        justify-content: flex-start;
         .icon{
-            display: none;
+            /* display: none; */
+            margin-left: 20px;
         }
     }
 `;

@@ -64,8 +64,12 @@ export function UpdatePoll() {
             const alert = await swal({
                 icon: 'warning',
                 title: `You want to ${status === "Draft" ? "save?" : "publish?"}`,
+                text: status === "Draft"
+                    ? ""
+                    : "Once published, you won't be able to edit it again.",
                 buttons: ["No", "Yes"],
-            })
+            });
+
 
             if (alert) {
                 setIsLoading(true)
@@ -96,7 +100,7 @@ export function UpdatePoll() {
     return (
         <>
             <Navbar></Navbar>
-            { isLoading && (<Loader></Loader>)}
+            {isLoading && (<Loader></Loader>)}
             <Navigate>
                 <span onClick={() => goTo("/polling")}>polling</span> {'/'} <span>update</span>
             </Navigate>

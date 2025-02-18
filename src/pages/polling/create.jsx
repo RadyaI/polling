@@ -48,8 +48,11 @@ export function CreatePoll() {
             const alert = await swal({
                 icon: 'warning',
                 title: `You want to ${status === "Draft" ? "save?" : "publish?"}`,
+                text: status === "Draft"
+                    ? ""
+                    : "Once published, you won't be able to edit it again.",
                 buttons: ["No", "Yes"],
-            })
+            });
 
             if (alert) {
                 setIsLoading(true)
@@ -67,8 +70,7 @@ export function CreatePoll() {
 
                 swal({
                     icon: 'success',
-                    // title: `${status === "Draft" ? "Saved" : "Published"}`,
-                    title: false,
+                        title: false,
                     button: false,
                     timer: 1200
                 })
