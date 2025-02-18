@@ -6,6 +6,7 @@ import { auth } from "../config/firebase"
 import Cookie from "js-cookie"
 import swal from "sweetalert"
 import { useNavigate } from "react-router-dom"
+import { toast, ToastContainer } from "react-toastify"
 
 export function Auth() {
 
@@ -23,11 +24,8 @@ export function Auth() {
             await signInWithEmailAndPassword(auth, email, password)
             setLoginBtn("Login")
         } catch (error) {
-            swal({
-                icon: 'error',
-                title: `${error.message}`,
-                button: "Ok"
-            })
+            setLoginBtn("Login")
+            toast.error(error.message)
         }
     }
 
@@ -37,11 +35,8 @@ export function Auth() {
             await createUserWithEmailAndPassword(auth, email, password)
             setLoginBtn("Register")
         } catch (error) {
-            swal({
-                icon: 'error',
-                title: `${error.message}`,
-                button: "Ok"
-            })
+            toast.error(error.message)
+            setLoginBtn("Register")
         }
     }
 
@@ -58,7 +53,7 @@ export function Auth() {
 
             Cookie.set("userData", JSON.stringify(storeUser))
         } catch (error) {
-            console.log({ error: error.message })
+            toast.error(error.message)
         }
     }
 
@@ -82,6 +77,11 @@ export function Auth() {
 
     return (
         <>
+            <ToastContainer
+                position="bottom-right"
+                draggable
+                theme="dark"
+            />
             <Container>
                 <Circle1></Circle1>
                 <Card>
