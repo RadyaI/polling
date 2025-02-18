@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { DeleteFilled, EditOutlined, EyeOutlined } from "@ant-design/icons";
+import { DeleteFilled, EditOutlined, EyeOutlined, LinkOutlined } from "@ant-design/icons";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../config/firebase";
 import { collection, deleteDoc, doc, getDocs, orderBy, query, where } from "firebase/firestore";
 import { Loader } from "./loader";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 export function PollingData() {
+
     const [search, setSearch] = useState("");
     const [filter, setFilter] = useState("");
 
@@ -83,7 +85,7 @@ export function PollingData() {
 
             const data = dataPoll.map((i, index) =>
                 <Card key={index}>
-                    <Title>{i.pollName}</Title>
+                    <Title>{i.pollName} <LinkOutlined onClick={() => copyLink(`https://onlinepoll.vercel.app/${i.id}`)} className="icon-title" /></Title>
                     <Timestamp>Last updated: {new Date(i.updatedAt).toLocaleString(("id-ID"), {
                         day: "2-digit",
                         month: "short",
@@ -107,6 +109,15 @@ export function PollingData() {
         }
     }
 
+    function copyLink(link) {
+        try {
+            navigator.clipboard.writeText(link)
+            toast.success("Copy successfully!")
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
         const subs = onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -120,6 +131,11 @@ export function PollingData() {
     return (
         <>
             {isLoading && (<Loader />)}
+            <ToastContainer 
+                position="bottom-right"
+                theme="dark"
+                draggable
+            />
             <Wrapper>
                 <FilterBox>
                     <SearchInput
@@ -210,6 +226,10 @@ const Card = styled.div`
 const Title = styled.h3`
     margin: 0;
     font-size: 18px;
+
+    .icon-title{
+        cursor: pointer;
+    }
 `;
 
 const Timestamp = styled.p`

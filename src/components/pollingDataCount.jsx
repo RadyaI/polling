@@ -4,6 +4,7 @@ import styled from "styled-components"
 import { auth, db } from "../config/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
+
 export function PollingDataCount() {
 
     const [pollingData, setPollingData] = useState([])

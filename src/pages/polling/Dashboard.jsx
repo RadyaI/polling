@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import Navbar from "../../components/navbar"
-import { EditOutlined } from "@ant-design/icons";
+import { EditOutlined, LinkOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { auth, db } from "../../config/firebase";
@@ -196,6 +196,10 @@ const Draft = styled.div`
         font-size: 18px;
         font-weight: bold;
         margin-left: 20px;
+    }
+
+    .wrapper .card .text .title .icon-title{
+        color: var(--text);
     }
 
     .wrapper .card .text small{
