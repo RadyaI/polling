@@ -7,6 +7,7 @@ import { auth, db } from "../../config/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "../../components/loader";
+import { PollingDataCount } from "../../components/pollingDataCount";
 import { getIp } from "../../utils/ip";
 
 
@@ -87,7 +88,9 @@ export function PollingList() {
                         <DisplayDraftPolling />
                     </div>
                 </Draft>
-                <Responders />
+                <Responders>
+                    <PollingDataCount></PollingDataCount>
+                </Responders>
             </Statistik>
         </Container>
     );
@@ -233,6 +236,9 @@ const Responders = styled.div`
     background-color: var(--optional);
     padding: 0 20px;
     padding-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     @media only screen and (max-width: 700px){
         width: 100%;
