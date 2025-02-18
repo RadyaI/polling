@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { Loader } from "../../components/loader";
 import { PollingDataCount } from "../../components/pollingDataCount";
 import { getIp } from "../../utils/ip";
-
+import { PollingData } from "../../components/pollingData";
 
 export function PollingList() {
     const router = useNavigate()
@@ -92,6 +92,7 @@ export function PollingList() {
                     <PollingDataCount></PollingDataCount>
                 </Responders>
             </Statistik>
+            <PollingData></PollingData>
         </Container>
     );
 }
