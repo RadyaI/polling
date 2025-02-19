@@ -5,6 +5,7 @@ import { Protected } from "../components/protectedRoute";
 import { CreatePoll } from "../pages/polling/create";
 import { PollingList } from "../pages/polling/Dashboard";
 import { UpdatePoll } from "../pages/polling/update";
+import { notFound } from "../components/404/notFound";
 
 const router = createBrowserRouter([
     {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
     {
         path: '/polling/update/:pollId',
         Component: () => <Protected View={UpdatePoll} />
+    },
+    {
+        path: "*",
+        Component: notFound
     }
 ])
 
