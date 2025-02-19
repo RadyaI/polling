@@ -172,6 +172,7 @@ const FilterBox = styled.div`
     gap: 15px;
     align-items: center;
     justify-content: space-between;
+    width: 100%;
 `;
 
 const SearchInput = styled.input`
@@ -191,6 +192,10 @@ const SearchInput = styled.input`
     &:focus {
         border: 2px solid var(--optional);
     }
+
+    @media only screen and (max-width: 700px){
+        width: 50%;
+    }
 `;
 
 const SelectFilter = styled.select`
@@ -200,6 +205,10 @@ const SelectFilter = styled.select`
     color: var(--text);
     font-size: 16px;
     cursor: pointer;
+
+    @media only screen and (max-width: 700px){
+        width: 40%;
+    }
 `;
 
 const Polling = styled.div`
