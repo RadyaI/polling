@@ -97,7 +97,7 @@ export function PollingData() {
                     <EditButton>
                         <Status className={i.status}>{i.status}</Status>
                         {i.status === "Draft" && (<EditOutlined className="icon" onClick={() => goTo(`/polling/update/${i.id}`)} />)}
-                        {i.status !== "Draft" && (<EyeOutlined className="icon" />)}
+                        {i.status !== "Draft" && (<EyeOutlined className="icon" onClick={() => goTo(`/${i.id}`)}/>)}
                         <DeleteFilled className="icon" onClick={() => deletePolling(i.id)}></DeleteFilled>
                     </EditButton>
                 </Card>

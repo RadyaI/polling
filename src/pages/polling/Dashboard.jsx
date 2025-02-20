@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import Navbar from "../../components/navbar"
-import { EditOutlined, LinkOutlined } from "@ant-design/icons";
+import { EditOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { auth, db } from "../../config/firebase";
