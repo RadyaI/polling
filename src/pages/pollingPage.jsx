@@ -51,7 +51,7 @@ export function pollingPage() {
                 toast.success("Polling Closed")
                 setTimeout(() => {
                     router("/polling")
-                }, 600);
+                }, 900);
             }
 
         } catch (error) {
