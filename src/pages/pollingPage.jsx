@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, Timestamp, updateDoc } from "firebase/firestore";
 import { auth, db } from "../config/firebase";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { CheckCircleOutlined } from "@ant-design/icons"; // Icon buat tombol
 import { toast, ToastContainer } from 'react-toastify'
+import swal from "sweetalert";
+import { onAuthStateChanged } from "firebase/auth";
 
 export function pollingPage() {
     const { id } = useParams();
@@ -12,8 +14,9 @@ export function pollingPage() {
     const [pollingData, setPollingData] = useState({
         pollName: "Loading...",
         author: "Loading...",
-        answer: [{value: "Loading..."}],
+        answer: [{ value: "Loading..." }],
     });
+    const [isOwner, setIsOwner] = useState(false)
 
     async function getPolling() {
         try {
@@ -33,9 +36,44 @@ export function pollingPage() {
         }
     }
 
+    async function closePolling() {
+        try {
+
+            const alert = await swal({
+                icon: 'warning',
+                title: 'Close polling?',
+                buttons: ["No", "Yes"]
+            })
+
+            if (alert) {
+                const docRef = doc(db, "polling", id)
+                await updateDoc(docRef, { status: "Closed", updatedAt: Timestamp.now().toMillis() })
+                toast.success("Polling Closed")
+                setTimeout(() => {
+                    router("/polling")
+                }, 600);
+            }
+
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+
     useEffect(() => {
         getPolling();
     }, []);
+
+    useEffect(() => {
+        const subs = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                if (user.uid === pollingData.userId) {
+                    setIsOwner(true)
+                }
+            }
+        })
+
+        return () => subs()
+    }, [pollingData])
 
     return (
         <>
@@ -57,6 +95,7 @@ export function pollingPage() {
                             </div>
                         )}
                     </Answer>
+                    {isOwner && (<button onClick={() => closePolling()}>Close polling</button>)}
                 </Wrapper>
             </Container>
         </>
@@ -75,6 +114,18 @@ const Container = styled.div`
 const Wrapper = styled.div`
     width: 50%;
     height: 90dvh;
+
+    button{
+        border: none;
+        padding: 10px 20px;
+        margin-top: 20px;
+        border-radius: 7px;
+        font-weight: bold;
+        font-size: 17px;
+        background-color: red;
+        color: var(--text);
+        cursor: pointer;
+    }
     
     @media only screen and (max-width: 700px){
         width: 90%;
