@@ -1,7 +1,7 @@
 import styled, { keyframes } from "styled-components"
 import Navbar from "../../components/navbar"
 import { useNavigate } from "react-router-dom"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { PlusCircleOutlined, MinusCircleOutlined } from '@ant-design/icons'
 import { auth, db } from "../../config/firebase"
 import { addDoc, collection, Timestamp } from "firebase/firestore"
@@ -62,6 +62,7 @@ export function CreatePoll() {
                 setIsLoading(true)
                 const pollingData = {
                     userId: auth.currentUser.uid,
+                    author: auth.currentUser.displayName,
                     pollName: title,
                     answer: options,
                     status,

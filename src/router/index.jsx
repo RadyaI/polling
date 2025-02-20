@@ -6,11 +6,16 @@ import { CreatePoll } from "../pages/polling/create";
 import { PollingList } from "../pages/polling/Dashboard";
 import { UpdatePoll } from "../pages/polling/update";
 import { notFound } from "../components/404/notFound";
+import { pollingPage } from "../pages/pollingPage";
 
 const router = createBrowserRouter([
     {
         path: '/',
         Component: Dashboard
+    },
+    {
+        path: "/:id",
+        Component: pollingPage
     },
     {
         path: '/auth',
