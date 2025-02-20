@@ -95,10 +95,10 @@ export function pollingPage() {
                             </div>
                         )}
                     </Answer>
-                    {isOwner && (<button onClick={() => closePolling()}>Close polling</button>)}
+                    {isOwner && pollingData.status === "Published" && (<button onClick={() => closePolling()}>Close polling</button>)}
                 </Wrapper>
             </Container>
-        </>
+        </> 
     );
 }
 
