@@ -86,7 +86,7 @@ export function PollingData() {
             const data = dataPoll.map((i, index) =>
                 <Card key={index}>
                     <Title>{i.pollName} { i.status === "Published" && (<LinkOutlined onClick={() => copyLink(`https://onlinepoll.vercel.app/${i.id}`)} className="icon-title" />)}</Title>
-                    <Timestamp>Last updated: {new Date(i.updatedAt).toLocaleString(("id-ID"), {
+                    <Timestamp> {`${i.status === "Draft" ? "Last updated:" : ""}`} {`${i.status === "Published" ? "Published at" : ""}`} {`${i.status === "Closed" ? "Closed at" : ""}`} {new Date(i.updatedAt).toLocaleString(("id-ID"), {
                         day: "2-digit",
                         month: "short",
                         year: "numeric",
