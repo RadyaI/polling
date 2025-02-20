@@ -147,6 +147,7 @@ const Draft = styled.div`
         font-size: 20px;
         font-weight: bold;
         margin-left: 5px;
+        margin: 10px 0;
     }
     
     .wrapper{

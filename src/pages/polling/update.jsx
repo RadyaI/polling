@@ -2,7 +2,7 @@ import styled, { keyframes } from "styled-components"
 import Navbar from "../../components/navbar"
 import { useNavigate, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
-import { PlusCircleOutlined } from '@ant-design/icons'
+import { PlusCircleOutlined, MinusCircleOutlined } from '@ant-design/icons'
 import { auth, db } from "../../config/firebase"
 import { doc, getDoc, Timestamp, updateDoc } from "firebase/firestore"
 import { Loader } from "../../components/loader"
@@ -13,12 +13,16 @@ export function UpdatePoll() {
     let { pollId } = useParams()
 
     const [title, setTitle] = useState("Loading...");
-    const [options, setOptions] = useState([{ value: "First Option" }]);
     const [isLoading, setIsLoading] = useState(false)
+    const [options, setOptions] = useState([{ value: "First Option" }]);
 
     const handleAddOption = () => {
         setOptions([...options, { value: "" }]);
     };
+
+    const handleRemoveOption = (index) => {
+        setOptions(options.filter((_, i) => i !== index))
+    }
 
     const handleOptionChange = (index, newValue) => {
         const updatedOptions = options.map((opt, i) =>
@@ -116,14 +120,17 @@ export function UpdatePoll() {
                 </div>
                 <div className="option">
                     {options.map((data, index) => (
-                        <input
-                            key={index}
-                            type="text"
-                            className="input-option"
-                            placeholder="Input option..."
-                            value={data.value}
-                            onChange={(e) => handleOptionChange(index, e.target.value)}
-                        />
+                        <div className="option-input">
+                            <MinusCircleOutlined onClick={() => handleRemoveOption(index)} className="iconMin" />
+                            <input
+                                key={index}
+                                type="text"
+                                className="input-option"
+                                placeholder="Input option..."
+                                value={data.value}
+                                onChange={(e) => handleOptionChange(index, e.target.value)}
+                            />
+                        </div>
                     ))}
                     <div className="addOption" onClick={handleAddOption}>
                         Add option <PlusCircleOutlined className="icon" />
@@ -194,7 +201,17 @@ const Wrapper = styled.div`
         margin-top: 50px;
     }
 
-    .option .input-option{
+    .option .iconMin{
+        color: var(--text);
+        font-size: 25px;
+        cursor: pointer;
+    }
+
+    .option .option-input{
+
+    }
+
+    .option .option-input .input-option{
         border: none;
         outline: none;
         width: 50%;
@@ -204,9 +221,10 @@ const Wrapper = styled.div`
         color: var(--text);
         background-color: var(--secondary);
         border-radius: 10px;
+        margin-left: 20px;
     }
 
-    .option > .input-option:not(:first-child){
+    .option .option-input > .input-option:not(:first-child){
         margin-top: 20px;
     }
 
