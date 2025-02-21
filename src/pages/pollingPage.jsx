@@ -229,6 +229,7 @@ const Answer = styled.div`
     width: 100%;
     height: auto;
     margin-top: 10px;
+    padding-bottom: 50px;
     
     .card {
         width: 100%;
