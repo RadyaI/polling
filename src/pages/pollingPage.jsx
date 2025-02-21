@@ -95,11 +95,8 @@ export function pollingPage() {
 
     async function getUserAnswer() {
         try {
-            const userIp = await getIp()
-
             const get = await getDocs(query(
                 collection(db, "userAnswer"),
-                where("ip", '==', userIp),
                 where("pollingId", '==', id)
             ))
 
