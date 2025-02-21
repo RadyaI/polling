@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { doc, getDoc, Timestamp, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, Timestamp, updateDoc } from "firebase/firestore";
 import { auth, db } from "../config/firebase";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -7,6 +7,7 @@ import { CheckCircleOutlined } from "@ant-design/icons"; // Icon buat tombol
 import { toast, ToastContainer } from 'react-toastify'
 import swal from "sweetalert";
 import { onAuthStateChanged } from "firebase/auth";
+import { checkIpAlreadyVote, getIp } from '../utils/ip'
 
 export function pollingPage() {
     const { id } = useParams();
@@ -23,7 +24,6 @@ export function pollingPage() {
             const get = await getDoc(doc(db, "polling", id));
             if (get.exists()) {
                 setPollingData({ ...get.data(), id: get.id });
-                console.log({ ...get.data(), id: get.id });
             } else {
                 router("/notfound")
             }
@@ -59,6 +59,38 @@ export function pollingPage() {
         }
     }
 
+    async function vote(value) {
+        try {
+            toast.info("Loading...")
+            if (await checkIpAlreadyVote(id)) {
+                toast.error("You already voted!");
+                return;
+            }
+
+            const alert = await swal({
+                icon: "warning",
+                title: "Are you sure? Once you vote, you won't be able to undo it.",
+                buttons: ["No", "Yes"]
+            });
+
+            if (alert) {
+                const docRef = collection(db, "userAnswer")
+                await addDoc(docRef, {
+                    pollingId: id,
+                    ip: await getIp(),
+                    votedAt: Timestamp.now().toMillis(),
+                    value
+                })
+
+                toast.success("Voted successfully")
+            }
+
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+
     useEffect(() => {
         getPolling();
     }, []);
@@ -89,7 +121,7 @@ export function pollingPage() {
                     </Title>
                     <Answer>
                         {pollingData.answer.map((i, index) =>
-                            <div className="card" key={index}>
+                            <div className="card" onClick={() => vote(i.value)} key={index}>
                                 <div className="circle"></div>
                                 <p>{i.value}</p>
                             </div>
@@ -98,7 +130,7 @@ export function pollingPage() {
                     {isOwner && pollingData.status === "Published" && (<button onClick={() => closePolling()}>Close polling</button>)}
                 </Wrapper>
             </Container>
-        </> 
+        </>
     );
 }
 
