@@ -63,7 +63,13 @@ export function pollingPage() {
     async function vote(value) {
         try {
             const userIp = await getIp()
+
+            if (pollingData.status === "Closed") {
+                toast.info("Polling closed!")
+                return;
+            }
             toast.info("Loading...")
+
             if (await checkIpAlreadyVote(id)) {
                 toast.error("You already voted!");
                 return;
@@ -138,12 +144,13 @@ export function pollingPage() {
                 <Wrapper>
                     <Title>
                         <p>{pollingData.pollName}</p>
-                        <small>{`${pollingData.author === null ? "Anonim" : pollingData.author}`}</small>
+                        <small>Author: {`${pollingData.author === null ? "Anonim" : pollingData.author}`}</small><br />
+                        {pollingData.status === "Closed" && (<small className="close">Closed</small>)}
                     </Title>
                     <Answer>
                         {pollingData.answer.map((i, index) =>
                             <div className="card" onClick={() => vote(i.value)} key={index}>
-                                <div className="circle">{ answerData.filter((data) => data.value === i.value).length }</div>
+                                <div className="circle">{answerData.filter((data) => data.value === i.value).length}</div>
                                 <p>{i.value}</p>
                             </div>
                         )}
@@ -187,10 +194,23 @@ const Wrapper = styled.div`
 
 const Title = styled.div`
     width: 80%;
+    height: fit-content;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
 
     p{
         font-size: 30px;
         font-weight: bold;
+    }
+
+    .close{
+        color: var(--text);
+        background-color: darkred;
+        padding: 5px;
+        width: fit-content;
+        height: fit-content;
+        border-radius: 5px;
     }
 `
 const Answer = styled.div`
