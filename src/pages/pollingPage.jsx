@@ -146,6 +146,7 @@ export function pollingPage() {
                         <p>{pollingData.pollName}</p>
                         <small>Author: {`${pollingData.author === null ? "Anonim" : pollingData.author}`}</small><br />
                         {pollingData.status === "Closed" && (<small className="close">Closed</small>)}
+                        {isOwner && (<small className="view-answer">View answer</small>)}
                     </Title>
                     <Answer>
                         {pollingData.answer.map((i, index) =>
@@ -211,6 +212,17 @@ const Title = styled.div`
         width: fit-content;
         height: fit-content;
         border-radius: 5px;
+    }
+
+    .view-answer{
+        color: var(--text);
+        background-color: darkgreen;
+        cursor: pointer;
+        padding: 5px;
+        width: fit-content;
+        height: fit-content;
+        border-radius: 5px;
+        margin-top: 5px;
     }
 `
 const Answer = styled.div`
