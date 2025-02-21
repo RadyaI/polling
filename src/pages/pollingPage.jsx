@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { addDoc, collection, doc, getDoc, Timestamp, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, onSnapshot, query, Timestamp, updateDoc, where } from "firebase/firestore";
 import { auth, db } from "../config/firebase";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -17,6 +17,7 @@ export function pollingPage() {
         author: "Loading...",
         answer: [{ value: "Loading..." }],
     });
+    const [answerData, setAnswerData] = useState([])
     const [isOwner, setIsOwner] = useState(false)
 
     async function getPolling() {
@@ -61,6 +62,7 @@ export function pollingPage() {
 
     async function vote(value) {
         try {
+            const userIp = await getIp()
             toast.info("Loading...")
             if (await checkIpAlreadyVote(id)) {
                 toast.error("You already voted!");
@@ -74,6 +76,7 @@ export function pollingPage() {
             });
 
             if (alert) {
+                toast.info("Wait...")
                 const docRef = collection(db, "userAnswer")
                 await addDoc(docRef, {
                     pollingId: id,
@@ -81,7 +84,7 @@ export function pollingPage() {
                     votedAt: Timestamp.now().toMillis(),
                     value
                 })
-
+                setAnswerData((prevData) => [...prevData, { pollingId: id, ip: userIp, votedAt: Timestamp.now().toMillis(), value }]);
                 toast.success("Voted successfully")
             }
 
@@ -90,9 +93,30 @@ export function pollingPage() {
         }
     }
 
+    async function getUserAnswer() {
+        try {
+            const userIp = await getIp()
+
+            const get = await getDocs(query(
+                collection(db, "userAnswer"),
+                where("ip", '==', userIp),
+                where("pollingId", '==', id)
+            ))
+
+            let temp = []
+            get.forEach((data) => {
+                temp.push({ ...data.data(), id: data.id })
+            })
+            setAnswerData(temp)
+
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
 
     useEffect(() => {
         getPolling();
+        getUserAnswer()
     }, []);
 
     useEffect(() => {
@@ -122,7 +146,7 @@ export function pollingPage() {
                     <Answer>
                         {pollingData.answer.map((i, index) =>
                             <div className="card" onClick={() => vote(i.value)} key={index}>
-                                <div className="circle"></div>
+                                <div className="circle">{ answerData.filter((data) => data.value === i.value).length }</div>
                                 <p>{i.value}</p>
                             </div>
                         )}
@@ -179,6 +203,7 @@ const Answer = styled.div`
     
     .card {
         width: 100%;
+        position: relative;
         background: var(--secondary);
         border-radius: 8px;
         display: flex;
@@ -208,6 +233,9 @@ const Answer = styled.div`
         border-radius: 50%;
         margin-left: 12px;
         transition: all 0.3s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     p {
