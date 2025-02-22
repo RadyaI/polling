@@ -7,6 +7,7 @@ import { toast, ToastContainer } from 'react-toastify'
 import swal from "sweetalert";
 import { onAuthStateChanged } from "firebase/auth";
 import { checkIpAlreadyVote, getIp } from '../utils/ip'
+import { ViewAnswer } from "../components/viewAnswer";
 
 export function pollingPage() {
     const { id } = useParams();
@@ -18,6 +19,9 @@ export function pollingPage() {
     });
     const [answerData, setAnswerData] = useState([])
     const [isOwner, setIsOwner] = useState(false)
+    const [toggleModal, setToggleModal] = useState(false)
+
+    const handleModal = (value) => setToggleModal(value)
 
     async function getPolling() {
         try {
@@ -139,13 +143,14 @@ export function pollingPage() {
                 position="bottom-right"
                 theme="dark"
             />
+            {toggleModal && (<ViewAnswer modal={handleModal} answer={answerData}></ViewAnswer>)}
             <Container>
                 <Wrapper>
                     <Title>
                         <p>{pollingData.pollName}</p>
                         <small>Author: {`${pollingData.author === null ? "Anonim" : pollingData.author}`}</small><br />
                         {pollingData.status === "Closed" && (<small className="close">Closed</small>)}
-                        {isOwner && (<small className="view-answer">View answer</small>)}
+                        {isOwner && (<small className="view-answer" onClick={() => setToggleModal(!toggleModal)}>View answer</small>)}
                     </Title>
                     <Answer>
                         {pollingData.answer.map((i, index) =>
