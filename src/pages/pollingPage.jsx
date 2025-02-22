@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { addDoc, collection, doc, getDoc, getDocs, onSnapshot, query, Timestamp, updateDoc, where } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, query, Timestamp, updateDoc, where } from "firebase/firestore";
 import { auth, db } from "../config/firebase";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { CheckCircleOutlined } from "@ant-design/icons"; // Icon buat tombol
 import { toast, ToastContainer } from 'react-toastify'
 import swal from "sweetalert";
 import { onAuthStateChanged } from "firebase/auth";
